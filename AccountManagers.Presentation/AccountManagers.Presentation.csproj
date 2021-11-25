@@ -55,7 +55,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="MainWindow.xaml">
+    <Compile Include="Command\RelayCommand.cs" />
+    <Compile Include="ViewModel\UserViewModel.cs" />
+    <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -63,7 +65,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="ViewModel\ViewModelBase.cs" />
+    <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
@@ -94,9 +97,20 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="ViewModel\" />
-    <Folder Include="View\" />
+    <ProjectReference Include="..\AccountManagers.Common\AccountManagers.Common.csproj">
+      <Project>{2ab61414-6713-4671-85ed-31e7c8bc533b}</Project>
+      <Name>AccountManagers.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AccountManagers.Model\AccountManagers.Model.csproj">
+      <Project>{4B16BCED-F8E6-4B3C-890A-1908AAA6CEC1}</Project>
+      <Name>AccountManagers.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AccountManagers.Repositories\AccountManagers.Repositories.csproj">
+      <Project>{D86F01D0-4238-417D-99E2-59449795B023}</Project>
+      <Name>AccountManagers.Repositories</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,0 +1,96 @@
+﻿<Window x:Class="AccountManagers.Presentation.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:vm="clr-namespace:AccountManagers.Presentation.ViewModel"
+        mc:Ignorable="d"
+        Title="Account Managers" Height="450" Width="800">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <DataGrid x:Name="UsersGrid" Grid.Column="1" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" Height="200" Margin="10" 
+                  ItemsSource="{Binding Users, Mode=OneWay}"
+                  SelectedItem ="{Binding SelectedUser, Mode=TwoWay}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Binding="{Binding Id}" Visibility="Hidden"/>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="100"  IsReadOnly="True"/>
+                <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="200"  IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <StackPanel Grid.Column="2" Grid.Row="1">
+            <GroupBox Header="User details">
+                <Grid IsEnabled="{Binding IsEditUser, UpdateSourceTrigger=PropertyChanged}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="10" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Column="0" Grid.Row="1" Margin="2" Content="Name" HorizontalAlignment="Left" />
+                    <TextBox Grid.Column="1" Grid.Row="1" Margin="2" x:Name="Name" HorizontalAlignment="Stretch" Text="{Binding SelectedUser.Name,UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+
+                    <Label Grid.Column="0" Grid.Row="2" Margin="2" Content="Email" HorizontalAlignment="Left" />
+                    <TextBox Grid.Column="1" Grid.Row="2" Margin="2" x:Name="Email" HorizontalAlignment="Stretch" Text="{Binding SelectedUser.Email,UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+
+                    <Label Grid.Column="0" Grid.Row="3" Margin="2" Content="CNP" HorizontalAlignment="Left" />
+                    <TextBox Grid.Column="1" Grid.Row="3" Margin="2" x:Name="CNP" HorizontalAlignment="Stretch" Text="{Binding SelectedUser.CNP, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+
+                    <Label Grid.Column="0" Grid.Row="4" Margin="2" Content="NoOfClients" HorizontalAlignment="Left" />
+                    <TextBox Grid.Column="1" Grid.Row="4" Margin="2" x:Name="NoOfClients" HorizontalAlignment="Stretch" Text="{Binding SelectedUser.NoOfClients,UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+
+                    <Button Grid.Column="1" Grid.Row="5" Content="Save" Margin="10" Height="30" Width="50" HorizontalAlignment="Right"
+                        Command="{Binding SaveUserCommand}" />
+                    <Button Grid.Column="0" Grid.Row="5" Content="Cancel" Margin="10" Height="30" Width="50" HorizontalAlignment="Left"
+                        Command="{Binding CancelCommand}" />
+                </Grid>
+            </GroupBox>
+        </StackPanel>
+
+        <StackPanel Grid.Column="3" Grid.Row="1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Button Grid.Column="0" Grid.Row="0" Content="New User" Margin="10" Height="30" Width="100" HorizontalAlignment="Center"
+                        Command="{Binding AddUserCommand}"/>
+
+                <Button  Grid.Column="0" Grid.Row="1" Content="Edit User" Margin="10" Height="30" Width="100" HorizontalAlignment="Center"
+                         Command="{Binding EditUserCommand}" />
+
+                <Button  Grid.Column="0" Grid.Row="2" Content="Delete User" Margin="10" Height="30" Width="100" HorizontalAlignment="Center"
+                         Command="{Binding DeleteUserCommand}" />
+                
+                <Button  Grid.Column="0" Grid.Row="3" Content="Export to CSV" Margin="10" Height="30" Width="100" HorizontalAlignment="Center"
+                         Command="{Binding ExportToCSVCommand}" />
+            </Grid>
+        </StackPanel>
+    </Grid>
+</Window>

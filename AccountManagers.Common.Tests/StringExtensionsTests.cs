@@ -30,10 +30,10 @@ namespace AccountManagers.Common.Tests
             var input = "1880720226720";
 
             //When
-            var result = input.Mask(0, 2);
+            var result = input.Mask(6, 10);
             //Then
 
-            Assert.Equal("**80720226720", result);
+            Assert.Equal("188072****720", result);
         }
 
         [Fact]

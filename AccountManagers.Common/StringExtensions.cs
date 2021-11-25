@@ -8,6 +8,17 @@ namespace AccountManagers.Common
 
         public static string Mask(this string @this, int startIndex, int endIndex)
         {
+            var characters = @this.ToCharArray();
+
+            for (int i = 0; i < characters.Length; i++)
+            {
+                if (i >= startIndex && i < endIndex)
+                {
+                    characters[i] = '*';
+                }
+            }
+
+            return new string(characters);
             if (string.IsNullOrEmpty(@this))
             {
                 return string.Empty;
@@ -18,7 +29,8 @@ namespace AccountManagers.Common
                 throw new ArgumentException();
             }
 
-            return string.Empty;
+            
+            
         }
     }
 }

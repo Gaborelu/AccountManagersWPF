@@ -43,6 +43,16 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="User\User.cs" />
+    <Compile Include="Utils\EmailValidator.cs" />
+    <Compile Include="Utils\IEmailValidator.cs" />
+    <Compile Include="Utils\IUserOutput.cs" />
+    <Compile Include="Utils\UsersCSVWriter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AccountManagers.Common\AccountManagers.Common.csproj">
+      <Project>{2ab61414-6713-4671-85ed-31e7c8bc533b}</Project>
+      <Name>AccountManagers.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

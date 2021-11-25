@@ -11,16 +11,15 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="20" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="3*" />
             <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <DataGrid x:Name="UsersGrid" Grid.Column="1" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" Height="200" Margin="10" 
+        <DataGrid x:Name="UsersGrid" Grid.Column="1" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" Height="200" Margin="10" VerticalAlignment="Top" HorizontalAlignment="Right"
                   ItemsSource="{Binding Users, Mode=OneWay}"
                   SelectedItem ="{Binding SelectedUser, Mode=TwoWay}">
             <DataGrid.Columns>
@@ -30,7 +29,7 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <StackPanel Grid.Column="2" Grid.Row="1">
+        <WrapPanel Grid.Column="2" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Left">
             <GroupBox Header="User details">
                 <Grid IsEnabled="{Binding IsEditUser, UpdateSourceTrigger=PropertyChanged}">
                     <Grid.ColumnDefinitions>
@@ -65,9 +64,9 @@
                         Command="{Binding CancelCommand}" />
                 </Grid>
             </GroupBox>
-        </StackPanel>
+        </WrapPanel>
 
-        <StackPanel Grid.Column="3" Grid.Row="1">
+        <WrapPanel Grid.Column="3" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Left">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -77,20 +76,24 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <Button Grid.Column="0" Grid.Row="0" Content="New User" Margin="10" Height="30" Width="100" HorizontalAlignment="Center"
+                <Button Grid.Column="0" Grid.Row="0" Content="Add User" Margin="10" Height="30" Width="100" HorizontalAlignment="Center"
+                        />
+                
+                <Button Grid.Column="0" Grid.Row="1" Content="New User" Margin="10" Height="30" Width="100" HorizontalAlignment="Center"
                         Command="{Binding AddUserCommand}"/>
 
-                <Button  Grid.Column="0" Grid.Row="1" Content="Edit User" Margin="10" Height="30" Width="100" HorizontalAlignment="Center"
+                <Button  Grid.Column="0" Grid.Row="2" Content="Edit User" Margin="10" Height="30" Width="100" HorizontalAlignment="Center"
                          Command="{Binding EditUserCommand}" />
 
-                <Button  Grid.Column="0" Grid.Row="2" Content="Delete User" Margin="10" Height="30" Width="100" HorizontalAlignment="Center"
+                <Button  Grid.Column="0" Grid.Row="3" Content="Delete User" Margin="10" Height="30" Width="100" HorizontalAlignment="Center"
                          Command="{Binding DeleteUserCommand}" />
-                
-                <Button  Grid.Column="0" Grid.Row="3" Content="Export to CSV" Margin="10" Height="30" Width="100" HorizontalAlignment="Center"
+
+                <Button  Grid.Column="0" Grid.Row="4" Content="Export to CSV" Margin="10" Height="30" Width="100" HorizontalAlignment="Center"
                          Command="{Binding ExportToCSVCommand}" />
             </Grid>
-        </StackPanel>
+        </WrapPanel>
     </Grid>
 </Window>

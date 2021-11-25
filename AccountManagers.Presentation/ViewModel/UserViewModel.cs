@@ -223,12 +223,14 @@ namespace AccountManagers.Presentation.ViewModel
                 return _exportToCSVCommand;
             }
         }
+
         private void ExportToCSV()
         {
             var users = _userRepository.GetAll();
             IUsersOutput userOutput = new UsersCSVWriter();
             userOutput.WriteFile(users);
             MessageBox.Show("Exported succesfully.");
-        }         
+        }
+      
     }
 }

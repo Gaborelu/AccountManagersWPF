@@ -6,6 +6,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace AccountManagers.DataAccess.UserRepository
@@ -17,6 +18,8 @@ namespace AccountManagers.DataAccess.UserRepository
         public IEnumerable<User> GetAll()
         {
             List<User> users = new List<User>();
+
+            //Thread.Sleep(5000);
 
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {

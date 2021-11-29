@@ -8,6 +8,17 @@ namespace AccountManagers.Common
 
         public static string Mask(this string @this, int startIndex, int endIndex)
         {
+            if (string.IsNullOrEmpty(@this))
+            {
+                return string.Empty;
+            }
+
+            if(startIndex > @this.Length || endIndex > @this.Length)
+            {
+                //throw new ArgumentException();
+                return @this;
+            }
+
             var characters = @this.ToCharArray();
 
             for (int i = 0; i < characters.Length; i++)
@@ -19,18 +30,6 @@ namespace AccountManagers.Common
             }
 
             return new string(characters);
-            if (string.IsNullOrEmpty(@this))
-            {
-                return string.Empty;
-            }
-
-            if(startIndex>@this.Length || endIndex > @this.Length)
-            {
-                throw new ArgumentException();
-            }
-
-            
-            
         }
     }
 }

@@ -19,12 +19,12 @@ namespace AccountManagers.Common.Utils
                 using (StreamWriter sw = new StreamWriter(path))
                 {
                     //header
-                    sw.WriteLine("Id,Name,Email");
+                    sw.WriteLine("Id,Name,Email,CNP,NoOfClients");
 
                     //data
                     foreach (var user in users)
                     {
-                        sw.WriteLine($"{user.Id},{user.Name},{user.Email}");
+                        sw.WriteLine($"{user.Id},{user.Name},{user.Email},{user.CNP},{user.NoOfClients}");
                     }
                 }
             }

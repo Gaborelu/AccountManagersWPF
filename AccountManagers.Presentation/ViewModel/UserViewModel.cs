@@ -9,13 +9,14 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
 namespace AccountManagers.Presentation.ViewModel
 {
-    public class UserViewModel : ViewModelBase
+    public class UserViewModel : ViewModelBase, IDataErrorInfo
     {
         public ObservableCollection<User> Users { get; set; }
         private IUserRepository _userRepository;
@@ -27,12 +28,22 @@ namespace AccountManagers.Presentation.ViewModel
             set
             {
                 _selectedUser = value;
-                OnPropertyChanged("SelectedUser");
+                OnPropertyChanged("SelectedUser");              
             }
-        }      
+        }
+        public User UserBeforeEdit { get; set; }
+
+        private bool _isViewUsers;
+        public bool IsViewUsers
+        {
+            get { return _isViewUsers; }
+            set { 
+                _isViewUsers = value;
+                OnPropertyChanged("IsViewUsers");
+            }
+        }
 
         private bool _isEditUser;
-
         public bool IsEditUser
         {
             get { return _isEditUser; }
@@ -48,10 +59,13 @@ namespace AccountManagers.Presentation.ViewModel
             _userRepository = new UserRepository();
             Users = new ObservableCollection<User>();
             DisplayUsers();
+            IsViewUsers = true;
+            SelectedUser = Users.FirstOrDefault();
         }
 
-        public void DisplayUsers()
+        private void DisplayUsers()
         {
+            //var users = await Task.Run(() => _userRepository.GetAll());
             var users = _userRepository.GetAll();
 
             Users.Clear();
@@ -59,7 +73,7 @@ namespace AccountManagers.Presentation.ViewModel
             foreach (var user in users)
             {
                 Users.Add(user);
-            }
+            }          
         }
 
         private ICommand _deleteUserCommand;
@@ -91,7 +105,6 @@ namespace AccountManagers.Presentation.ViewModel
                 {
                     DisplayUsers();
                 }
-
             }
         }
 
@@ -113,7 +126,7 @@ namespace AccountManagers.Presentation.ViewModel
             Users.Add(user);
             SelectedUser = user;
 
-            IsEditUser = true;
+            SwitchEditListView();
         }
 
         private ICommand _editUserCommand;
@@ -131,10 +144,20 @@ namespace AccountManagers.Presentation.ViewModel
 
         public void EditUser()
         {
-            if(SelectedUser != null)
-            {
-                IsEditUser = true;
+            if (SelectedUser != null)
+            {               
+                SwitchEditListView();
             }
+
+            //UserBeforeEdit = new User
+            //{
+            //    Id = SelectedUser.Id,
+            //    Name = SelectedUser.Name,
+            //    Email = SelectedUser.Email,
+            //    CNP = SelectedUser.CNP,
+            //    NoOfClients = SelectedUser.NoOfClients
+            //};
+
         }
 
         private ICommand _saveUserCommand;
@@ -155,21 +178,21 @@ namespace AccountManagers.Presentation.ViewModel
             {
                 if (SelectedUser.Id == 0)
                 {
-                    _userRepository.InsertUser(SelectedUser);
-                    IsEditUser = false;
+                    _userRepository.InsertUser(SelectedUser);                    
                     MessageBox.Show("User saved.");
+                    SwitchEditListView();
                 }
                 else
                 {
-                    _userRepository.UpdateUser(SelectedUser);
-                    IsEditUser = false;
+                    _userRepository.UpdateUser(SelectedUser);                   
                     MessageBox.Show("User edited.");
+                    SwitchEditListView();
+                    //UserBeforeEdit = null;
                 }
 
             }
             catch (Exception ex)
             {
-
                 MessageBox.Show("Error occured" + ex.Message);
             }
             finally
@@ -178,17 +201,6 @@ namespace AccountManagers.Presentation.ViewModel
             }
 
         }
-
-        //public bool CanSave()
-        //{
-        //    IEmailValidator emailValidator = new EmailValidator();
-        //    if(SelectedUser != null)
-        //    {
-        //        return emailValidator.IsEmailValid(SelectedUser.Email);
-        //    }
-        //    return false;
-
-        //}
 
         private ICommand _cancelCommand;
         public ICommand CancelCommand
@@ -205,10 +217,27 @@ namespace AccountManagers.Presentation.ViewModel
 
         public void CancelUser()
         {
-            Users.Remove(SelectedUser);
-            SelectedUser = Users.FirstOrDefault();
+            if(SelectedUser.Id == 0)
+            {
+                Users.Remove(SelectedUser);                
+            }
+            //else
+            //{
+            //    SelectedUser = new User
+            //    {
+            //        Id = UserBeforeEdit.Id,
+            //        Name = UserBeforeEdit.Name,
+            //        Email = UserBeforeEdit.Email,
+            //        CNP = UserBeforeEdit.CNP,
+            //        NoOfClients = UserBeforeEdit.NoOfClients
+            //    };                
+            //}
+            //UserBeforeEdit = null;
+
+            SwitchEditListView();
+            DisplayUsers();
             
-            IsEditUser = false;
+            SelectedUser = Users.FirstOrDefault();  
         }
 
         private ICommand _exportToCSVCommand;
@@ -231,6 +260,48 @@ namespace AccountManagers.Presentation.ViewModel
             userOutput.WriteFile(users);
             MessageBox.Show("Exported succesfully.");
         }
-      
+
+        private void SwitchEditListView()
+        {
+            IsViewUsers = !IsViewUsers;
+            IsEditUser = !IsEditUser;
+        }
+
+        public string this[string columnName]
+        {
+            get
+            {
+                string error = string.Empty;
+
+                switch (columnName)
+                {
+                    case nameof(SelectedUser.Name):
+                        if (string.IsNullOrEmpty(SelectedUser.Name))
+                        {
+                            error = "Name cannot be empty";
+                        }
+                        break;
+                    case nameof(SelectedUser.Email):
+                        IEmailValidator emailValidator = new EmailValidator();
+                        var result = emailValidator.IsEmailValid(SelectedUser.Email);
+                        if (result == false)
+                        {
+                            error = "Please enter a valid email address.";
+                        }
+                        break;
+                    case nameof(SelectedUser.CNP):
+                        if (SelectedUser.CNP.Length != 10)
+                        {
+                            error = "CNP must have 10 characters";
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+                return error;
+            }
+        }
+        public string Error => string.Empty;
     }
 }

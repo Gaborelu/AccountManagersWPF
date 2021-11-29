@@ -8,16 +8,17 @@ namespace AccountManagers.Models.User
         public int Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
-        private string _CNP;
+
+        private string _cnp;
 
         public string CNP
         {
             get {
-                //return _CNP.Mask(0,2); 
-                return _CNP;
+                return _cnp;
             }
-            set { _CNP = value; }
+            set { _cnp = value; }
         }
+
 
         public int NoOfClients { get; set; }
 
